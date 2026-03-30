@@ -1,0 +1,214 @@
+import java.util.ArrayList;
+
+class Paciente {
+
+    private String nome;
+    private String cpf;
+    private String telefone;
+    private String genero;
+    private int idade;
+
+    public Paciente() {}
+
+    public Paciente(String nome, String cpf, String telefone, String genero, int idade) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.genero = genero;
+        this.idade = idade;
+    }
+
+    public void cadastrar() {
+        System.out.println("Paciente cadastrado com sucesso.");
+    }
+
+    public void consultar() {
+        System.out.println("Consultando dados do paciente...");
+    }
+
+    public void mostrar() {
+        System.out.println("Paciente: " + nome);
+    }
+}
+
+class Medico {
+
+    private String nome;
+    private String crm;
+    private String telefone;
+    private String especialidade;
+    private String senha;
+
+    public Medico() {}
+
+    public Medico(String nome, String crm, String telefone, String especialidade, String senha) {
+        this.nome = nome;
+        this.crm = crm;
+        this.telefone = telefone;
+        this.especialidade = especialidade;
+        this.senha = senha;
+    }
+
+    public void acessar() {
+        System.out.println("Médico acessando sistema...");
+    }
+
+    public void mostrar() {
+        System.out.println("Médico: " + nome);
+    }
+}
+
+class Recepcionista {
+
+    private String nome;
+    private String cpf;
+    private String telefone;
+    private String senha;
+
+    public Recepcionista() {}
+
+    public Recepcionista(String nome, String cpf, String telefone, String senha) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.senha = senha;
+    }
+
+    public void acessar() {
+        System.out.println("Recepcionista acessando sistema...");
+    }
+}
+
+
+class Agenda {
+
+    private String data;
+    private String hora;
+    private Medico medico;     
+    private Paciente paciente;  
+
+    public Agenda(String data, String hora, Medico medico, Paciente paciente) {
+        this.data = data;
+        this.hora = hora;
+        this.medico = medico;
+        this.paciente = paciente;
+    }
+
+    public void mostrar() {
+        System.out.println("\nAgenda:");
+        System.out.println("Data: " + data);
+        System.out.println("Hora: " + hora);
+        medico.mostrar();
+        paciente.mostrar();
+    }
+}
+
+class Receita {
+
+    private Consulta consulta;
+    private String data;
+    private String descritivo;
+
+    public Receita(Consulta consulta, String data, String descritivo) {
+        this.consulta = consulta;
+        this.data = data;
+        this.descritivo = descritivo;
+    }
+
+    public void prescrever() {
+        System.out.println("Receita prescrita: " + descritivo);
+    }
+}
+
+class Exame {
+
+    private Consulta consulta;
+    private String data;
+    private String descritivo;
+
+    public Exame(Consulta consulta, String data, String descritivo) {
+        this.consulta = consulta;
+        this.data = data;
+        this.descritivo = descritivo;
+    }
+
+    public void solicitar() {
+        System.out.println("Exame solicitado: " + descritivo);
+    }
+}
+
+class Consulta {
+
+    private String data;
+    private String hora;
+    private Medico medico;      // agregação
+    private Paciente paciente;  // agregação
+    private String motivo;
+    private String historico;
+
+    private ArrayList<Receita> receitas = new ArrayList<>();
+    private ArrayList<Exame> exames = new ArrayList<>();
+
+    public Consulta(String data, String hora, Medico medico, Paciente paciente, String motivo, String historico) {
+        this.data = data;
+        this.hora = hora;
+        this.medico = medico;
+        this.paciente = paciente;
+        this.motivo = motivo;
+        this.historico = historico;
+    }
+
+    public void adicionarReceita(String data, String desc) {
+        Receita r = new Receita(this, data, desc);
+        receitas.add(r);
+    }
+
+    public void adicionarExame(String data, String desc) {
+        Exame e = new Exame(this, data, desc);
+        exames.add(e);
+    }
+
+    public void mostrar() {
+        System.out.println("\nConsulta:");
+        System.out.println("Data: " + data);
+        System.out.println("Hora: " + hora);
+        medico.mostrar();
+        paciente.mostrar();
+        System.out.println("Motivo: " + motivo);
+        System.out.println("Histórico: " + historico);
+
+        System.out.println("\nReceitas:");
+        for (Receita r : receitas) {
+            r.prescrever();
+        }
+
+        System.out.println("\nExames:");
+        for (Exame e : exames) {
+            e.solicitar();
+        }
+    }
+}
+
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Paciente p = new Paciente("João", "123", "9999", "M", 25);
+        Medico m = new Medico("Dr. Silva", "CRM123", "8888", "Cardio", "123");
+        Recepcionista r = new Recepcionista("Maria", "456", "7777", "abc");
+
+        r.acessar();
+        m.acessar();
+
+        Agenda agenda = new Agenda("10/10/2025", "14:00", m, p);
+        agenda.mostrar();
+
+        Consulta c = new Consulta("10/10/2025", "14:00", m, p, "Dor", "Nenhum histórico");
+
+        c.adicionarReceita("10/10/2025", "Paracetamol");
+        c.adicionarExame("10/10/2025", "Exame de sangue");
+
+        c.mostrar();
+    }
+}
