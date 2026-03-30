@@ -141,8 +141,8 @@ class Consulta {
 
     private String data;
     private String hora;
-    private Medico medico;      // agregação
-    private Paciente paciente;  // agregação
+    private Medico medico;     
+    private Paciente paciente;  
     private String motivo;
     private String historico;
 
